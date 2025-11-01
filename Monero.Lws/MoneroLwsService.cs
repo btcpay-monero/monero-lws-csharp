@@ -8,7 +8,7 @@ using Monero.Lws.Response;
 
 namespace Monero.Lws;
 
-public class MoneroLwsService(Uri uri, string username, string password, HttpClient? client = null)
+public class MoneroLwsService(Uri uri, String lwsPath, string username, string password, HttpClient? client = null)
 {
     private HttpClient _httpClient = client ?? new HttpClient();
     private string _username = username;
@@ -21,7 +21,7 @@ public class MoneroLwsService(Uri uri, string username, string password, HttpCli
         var httpRequest = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri(uri, $"/{method}"),
+            RequestUri = new Uri(uri, $"{lwsPath}/{method}"),
             Content = new StringContent(
                 JsonSerializer.Serialize(data, jsonSerializer),
                 Encoding.UTF8, "application/json")

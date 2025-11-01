@@ -5,7 +5,7 @@ services:
       context: ..
       dockerfile: Monero.Lws.IntegrationTests/Dockerfile
     environment:
-      XMR_LWS_URI: http://lws:8443/lws
+      XMR_LWS_URI: http://lws:8443
       TESTS_INCONTAINER: "true"
     depends_on:
       - lws
@@ -60,7 +60,6 @@ services:
       "--fixed-difficulty=200",
       "--log-level=2",
       "--disable-rpc-ban",
-      "--non-interactive",
       "--p2p-bind-ip=0.0.0.0",
       "--p2p-bind-port=18080",
       "--rpc-bind-ip=0.0.0.0",
@@ -97,7 +96,7 @@ services:
     command: >
       --daemon=tcp://node_2:18082
       --sub=tcp://node_2:18084
-      --log-level=2
+      --log-level=4
       --webhook-ssl-verification=none
       --disable-admin-auth
       --admin-rest-server=http://0.0.0.0:8443/admin
