@@ -68,7 +68,7 @@ services:
       "--rpc-access-control-origins=*",
       "--rpc-ssl=disabled",
       "--zmq-rpc-bind-ip=0.0.0.0",
-      "--zmq-rpc-bind-port=1882",
+      "--zmq-rpc-bind-port=18082",
       "--zmq-pub=tcp://0.0.0.0:18084",
       "--add-exclusive-node=node_1:48080",
       "--regtest",
