@@ -74,7 +74,6 @@ services:
       "--regtest",
       "--no-igd",
       "--hide-my-port",
-      "--no-zmq",
       "--max-connections-per-ip=100",
       "--rpc-max-connections-per-private-ip=100",
       "--non-interactive"
@@ -92,7 +91,6 @@ services:
   lws:
     image: vtnerd/monero-lws:0.3
     container_name: lws
-    restart: unless-stopped
     command: >
       --daemon=tcp://node_2:18082
       --sub=tcp://node_2:18084
