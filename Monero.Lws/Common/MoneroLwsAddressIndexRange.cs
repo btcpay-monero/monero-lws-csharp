@@ -16,6 +16,12 @@ public class MoneroLwsAddressIndexRange
     /// </summary>
     public long UpperBound { get; set; }
 
+    public MoneroLwsAddressIndexRange(long lowerBound, long upperBound)
+    {
+        LowerBound = lowerBound;
+        UpperBound = upperBound;
+    }
+    
     [JsonConstructor]
     public MoneroLwsAddressIndexRange(JsonElement json)
     {

@@ -305,7 +305,8 @@ public class MoneroLwsService(Uri uri, String lwsPath, string username, string p
     /// <param name="minCount">Number of minor subaddresses to provision.</param>
     /// <param name="getAll">Whether to include all subaddresses in response.</param>
     /// <returns></returns>
-    public async Task<MoneroLwsSubaddrs> ProvisionSubaddrs(string address, string viewKey, long majIndex, long minIndex, long majCount, long minCount, bool getAll)
+    public async Task<MoneroLwsSubaddrs> ProvisionSubaddrs(string address, string viewKey, long majIndex, long minIndex,
+        long majCount, long minCount, bool getAll)
     {
         var req = new MoneroLwsProvisionSubaddrsRequest()
         {
