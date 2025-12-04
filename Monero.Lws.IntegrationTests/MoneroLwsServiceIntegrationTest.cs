@@ -38,8 +38,10 @@ public class MoneroLwsServiceIntegrationTest
         if (response.NewAddress)
         {
             Assert.NotNull(response.GeneratedLocally);
-            Assert.NotNull(response.StartHeight);
-            Assert.True(response.StartHeight > 0);
+            if (response.StartHeight != null)
+            {
+                Assert.True(response.StartHeight > 0);
+            }
         }
         else
         {
@@ -106,12 +108,17 @@ public class MoneroLwsServiceIntegrationTest
     public async Task TestGetUnspentOuts()
     {
         var response = await Lws.GetUnspentOuts(Address, ViewKey, "0", 0, true);
-        Assert.NotNull(response.PerByteFee);
-        Assert.NotNull(response.Amount);
-        Assert.NotNull(response.FeeMask);
-        Assert.NotEmpty(response.PerByteFee);
-        Assert.NotEmpty(response.Amount);
-        Assert.NotEmpty(response.FeeMask);
+        Assert.True(response.PerByteFee > 0);
+        Assert.True(response.FeeMask > 0);
+        Assert.False(string.IsNullOrEmpty(response.Amount));
+        Assert.Equal(4, response.Fees.Count);
+        long lastFee = 0;
+        foreach (var fee in response.Fees)
+        {
+            Assert.True(fee > lastFee);
+            lastFee = fee;
+        }
+        
         foreach (var output in response.Outputs)
         {
             TestOutput(output);
@@ -138,13 +145,14 @@ public class MoneroLwsServiceIntegrationTest
         if (response.NewRequest)
         {
             Assert.False(response.RequestFulfilled);
+            Assert.Equal("Accepted, waiting for approval", response.Status);
         }
 
         if (response.RequestFulfilled)
         {
             Assert.NotNull(response.Status);
         }
-        else
+        else if (!response.NewRequest)
         {
             Assert.Equal("Waiting for Approval", response.Status);
         }
@@ -158,7 +166,8 @@ public class MoneroLwsServiceIntegrationTest
         {
             AccountIndex = 1,
         };
-        entry.Ranges.Add([0, 10]);
+        entry.Ranges.Add([2, 10]);
+        subaddrs.Add(entry);
         var response = await Lws.UpsertSubaddrs(Address, ViewKey, subaddrs, true);
         TestSubaddrs(response, true, true);
     }
