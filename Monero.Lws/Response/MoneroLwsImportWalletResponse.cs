@@ -5,7 +5,7 @@ namespace Monero.Lws.Response;
 /// <summary>
 /// Class <c>MoneroLwsImportRequestResponse</c> models an account scan request from the genesis block.
 /// </summary>
-public class MoneroLwsImportRequestResponse : MoneroLwsStatusResponse
+public class MoneroLwsImportWalletResponse : MoneroLwsStatusResponse
 {
     /// <summary>
     /// Payment location. Null if the client does not need to send XMR to complete the request.

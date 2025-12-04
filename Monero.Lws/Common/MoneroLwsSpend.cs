@@ -32,4 +32,8 @@ public class MoneroLwsSpend
     /// Mixin of the spend. Does not include the real spend - this is the number of dummy inputs.
     /// </summary>
     [JsonPropertyName("mixin")] public int Mixin { get; set; } = 0;
+    /// <summary>
+    /// Address data of the sender.
+    /// </summary>
+    [JsonPropertyName("sender")] public MoneroLwsAddressMeta Sender { get; set; } = new();
 }

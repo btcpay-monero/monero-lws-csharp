@@ -50,4 +50,6 @@ public class MoneroLwsOutput
     [JsonPropertyName("timestamp")] public string Timestamp { get; set; } = "";
     /// <summary>Containing block height.</summary>
     [JsonPropertyName("height")] public long Height { get; set; } = 0;
+    /// <summary>Address data of the recipient.</summary>
+    [JsonPropertyName("recipient")] public MoneroLwsAddressMeta Recipient { get; set; } = new();
 }

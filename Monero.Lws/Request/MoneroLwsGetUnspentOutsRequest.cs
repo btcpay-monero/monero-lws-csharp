@@ -5,7 +5,7 @@ namespace Monero.Lws.Request;
 /// <summary>
 /// Class <c>MoneroLwsGetUnspentOutsRequest</c> models a request for received outputs.
 /// </summary>
-public class MoneroLwsGetUnspentOutsRequest : MoneroLwsWalletRequest
+public class MoneroLwsGetUnspentOutsRequest() : MoneroLwsWalletRequest()
 {
     /// <summary>
     /// XMR send amount.
@@ -22,5 +22,6 @@ public class MoneroLwsGetUnspentOutsRequest : MoneroLwsWalletRequest
     /// <summary>
     /// Ignore outputs below this amount.
     /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("dust_threshold")] public string? DustThreshold { get; set; } = null;
 }
