@@ -9,7 +9,7 @@ namespace Monero.Lws.Request;
 /// If the amount is not 0, then the monerod RPC get_output_histogram should be used to locally select outputs using
 /// a triangular distribution (uint64_t dummy_out = histogram.total * sqrt(float64(random_uint53) / float64(2^53))).
 /// </summary>
-public class MoneroLwsGetRandomOutsRequest
+public class MoneroLwsGetRandomOutsRequest(): MoneroLwsRequest()
 {
     /// <summary>
     /// Mixin (name is historical). Clients must use amount 0 when computing a ringct output.

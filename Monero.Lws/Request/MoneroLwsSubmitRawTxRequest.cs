@@ -6,7 +6,7 @@ namespace Monero.Lws.Request;
 /// Class <c>MoneroLwsSubmitRawTxRequest</c> models a request for submit a raw transaction to be relayed to monero
 /// network.
 /// </summary>
-public class MoneroLwsSubmitRawTxRequest
+public class MoneroLwsSubmitRawTxRequest() : MoneroLwsRequest()
 {
     /// <summary>
     /// Raw transaction bytes, in format used by daemon p2p comms.

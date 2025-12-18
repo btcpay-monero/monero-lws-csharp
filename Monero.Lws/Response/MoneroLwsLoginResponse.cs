@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Monero.Lws.Common;
 
 namespace Monero.Lws.Response;
 
@@ -19,4 +20,8 @@ public class MoneroLwsLoginResponse
     /// Account scanning start block.
     /// </summary>
     [JsonPropertyName("start_height")] public long? StartHeight { get; set; } = null;
+    /// <summary>
+    /// Account lookahead.
+    /// </summary>
+    [JsonPropertyName("lookahead")] public MoneroLwsAccountLookahead Lookahead { get; set; } = new();
 }
