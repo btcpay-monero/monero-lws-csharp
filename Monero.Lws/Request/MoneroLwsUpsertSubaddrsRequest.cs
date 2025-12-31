@@ -6,7 +6,7 @@ namespace Monero.Lws.Request;
 /// <summary>
 /// Upsert subaddresses at the specified major and minor indexes. This endpoint is idempotent.
 /// </summary>
-public class MoneroLwsUpsertSubaddrsRequest() : MoneroLwsWalletRequest()
+public class MoneroLwsUpsertSubaddrsRequest : MoneroLwsWalletRequest
 {
     /// <summary>
     /// Subaddresses to upsert.

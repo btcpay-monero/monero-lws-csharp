@@ -8,7 +8,7 @@ using Monero.Lws.Response;
 
 namespace Monero.Lws;
 
-public class MoneroLwsService(Uri uri, string lwsPath, string username, string password, HttpClient? client = null)
+public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string username, string password, string? auth = null, HttpClient? client = null)
 {
     private HttpClient _httpClient = client ?? new HttpClient();
     private string _username = username;
@@ -24,10 +24,11 @@ public class MoneroLwsService(Uri uri, string lwsPath, string username, string p
     {
         var jsonSerializer = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         var body = JsonSerializer.Serialize(data, jsonSerializer);
+        var path = (data is MoneroLwsAdminRequest) ? adminPath : lwsPath;
         var httpRequest = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri(uri, $"{lwsPath}/{method}"),
+            RequestUri = new Uri(uri, $"{path}/{method}"),
             Content = new StringContent(
                 body,
                 Encoding.UTF8, "application/json")
@@ -106,7 +107,16 @@ public class MoneroLwsService(Uri uri, string lwsPath, string username, string p
         _username = username;
         _password = password;
     }
-
+    
+    /// <summary>
+    /// Get LWS server version.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<MoneroLwsDaemonStatus> GetDaemonStatus()
+    {
+        return await SendCommandAsync<MoneroLwsDaemonStatus>("daemon_status");
+    }
+    
     /// <summary>
     /// Get LWS server version.
     /// </summary>
@@ -322,4 +332,167 @@ public class MoneroLwsService(Uri uri, string lwsPath, string username, string p
 
         return await SendCommandAsync<MoneroLwsProvisionSubaddrsRequest, MoneroLwsSubaddrs>("provision_subaddrs", req);
     }
+    
+    #region Administration
+
+    /// <summary>
+    /// Accepts create or import requests in the incoming queue.
+    /// </summary>
+    /// <param name="type"><c>create</c> or <c>import</c>.</param>
+    /// <param name="addresses">Account addresses to accept.</param>
+    /// <returns></returns>
+    public async Task<MoneroLwsUpdateResponse> AcceptRequests(string type, List<string> addresses)
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Params = new MoneroLwsAdminParams
+            {
+                RequestType = type,
+                Addresses = addresses
+            },
+            Auth = auth
+        };
+
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("accept_requests", req);
+    }
+    
+    /// <summary>
+    /// Reject account creation or import from the incoming queue.
+    /// </summary>
+    /// <param name="type"><c>create</c> or <c>import</c>.</param>
+    /// <param name="addresses">Account addresses to reject.</param>
+    /// <returns></returns>
+    public async Task<MoneroLwsUpdateResponse> RejectRequests(string type, List<string> addresses)
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Params = new MoneroLwsAdminParams
+            {
+                RequestType = type,
+                Addresses = addresses
+            },
+            Auth = auth
+        };
+
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("reject_requests", req);
+    }
+    
+    /// <summary>
+    /// Add account for view-key scanning.
+    /// </summary>
+    /// <param name="address">Account primary address.</param>
+    /// <param name="viewKey">Account private view key.</param>
+    /// <returns></returns>
+    public async Task<MoneroLwsUpdateResponse> AddAccount(string address, string viewKey)
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Params = new MoneroLwsAdminParams
+            {
+                Address = address,
+                Key = viewKey
+            },
+            Auth = auth
+        };
+        
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("add_account", req);
+    }
+
+    /// <summary>
+    /// Change an account status to <c>active</c>, <c>inactive</c> or <c>hidden</c>.
+    /// The <c>active</c> state is the normal state: the account is being scanned and returned by the API.
+    /// The <c>inactive</c> state is still returned by the API, but is no longer being scanned.
+    /// The <c>hidden</c> is the current way to <i>delete</i> an account: it is not scanned nor returned by the API.
+    /// Accounts cannot currently be deleted due to internal DB requirements.
+    /// </summary>
+    /// <param name="status">Account status to apply (<c>active</c>, <c>inactive</c> or <c>hidden</c>).</param>
+    /// <param name="addresses">Account addresses.</param>
+    /// <returns></returns>
+    public async Task<MoneroLwsUpdateResponse> ModifyAccountStatus(string status, List<string> addresses)
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Params = new MoneroLwsAdminParams
+            {
+                Addresses = addresses,
+                Status = status
+            },
+            Auth = auth
+        };
+        
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("modify_account_status", req);
+    }
+
+    /// <summary>
+    /// Request a listing of all active accounts in the database.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<MoneroLwsListAccountsResponse> ListAccounts()
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Auth = auth
+        };
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsListAccountsResponse>("list_accounts", req);
+    }
+    
+    /// <summary>
+    /// Return the listing of all pending new account requests and all requests to import from genesis block requests.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<MoneroLwsListRequestsResponse> ListRequests()
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Auth = auth
+        };
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsListRequestsResponse>("list_requests", req);
+    }
+
+    /// <summary>
+    /// Rescan specific account(s) from the specified height.
+    /// </summary>
+    /// <param name="height">Blockchain height.</param>
+    /// <param name="addresses">Addresses to rescan.</param>
+    /// <returns></returns>
+    public async Task<MoneroLwsUpdateResponse> Rescan(long height, List<string> addresses)
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Params = new MoneroLwsAdminParams
+            {
+                Addresses = addresses,
+                Height = height
+            },
+            Auth = auth
+        };
+        
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("rescan", req);
+    }
+
+    /// <summary>
+    /// Validate account keys.
+    /// </summary>
+    /// <param name="viewPublicHex">Account view public key as hex.</param>
+    /// <param name="spendPublicHex">Account spend public key as hex.</param>
+    /// <param name="viewKeyHex">Account private view key as hex.</param>
+    /// <returns></returns>
+    public async Task<MoneroLwsValidateResponse> Validate(string viewPublicHex, string spendPublicHex,
+        string viewKeyHex)
+    {
+        var req = new MoneroLwsAdminRequest
+        {
+            Params = new MoneroLwsAdminParams
+            {
+                ViewPublicHex = viewPublicHex,
+                SpendPublicHex = spendPublicHex,
+                ViewKeyHex = viewKeyHex
+            },
+            Auth = auth
+        };
+        
+        return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsValidateResponse>("validate", req);
+    }
+
+    #endregion
 }

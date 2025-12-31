@@ -6,7 +6,7 @@ namespace Monero.Lws.Request;
 /// the same newly provisioned subaddresses when calling this endpoint; the server
 /// should guarantee that newly provisioned subaddresses are fresh.
 /// </summary>
-public class MoneroLwsProvisionSubaddrsRequest() : MoneroLwsWalletRequest()
+public class MoneroLwsProvisionSubaddrsRequest : MoneroLwsWalletRequest
 {
     /// <summary>
     /// Subaddress major index.
