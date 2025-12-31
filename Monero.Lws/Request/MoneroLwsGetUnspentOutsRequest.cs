@@ -5,7 +5,7 @@ namespace Monero.Lws.Request;
 /// <summary>
 /// Class <c>MoneroLwsGetUnspentOutsRequest</c> models a request for received outputs.
 /// </summary>
-public class MoneroLwsGetUnspentOutsRequest() : MoneroLwsWalletRequest()
+public class MoneroLwsGetUnspentOutsRequest : MoneroLwsWalletRequest
 {
     /// <summary>
     /// XMR send amount.

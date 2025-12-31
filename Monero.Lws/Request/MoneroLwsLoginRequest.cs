@@ -7,7 +7,7 @@ namespace Monero.Lws.Request;
 /// Class <c>MoneroLwsLoginRequest</c> models a request for account check or creation.
 /// The view key bytes are required even if an account is not being created, to prevent metadata leakage.
 /// </summary>
-public class MoneroLwsLoginRequest() : MoneroLwsWalletRequest()
+public class MoneroLwsLoginRequest : MoneroLwsWalletRequest
 {
     /// <summary>
     /// Try to create a new account.
