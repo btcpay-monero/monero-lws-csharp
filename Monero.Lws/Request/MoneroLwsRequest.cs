@@ -5,5 +5,4 @@ namespace Monero.Lws.Request;
 /// </summary>
 public class MoneroLwsRequest
 {
-    
 }

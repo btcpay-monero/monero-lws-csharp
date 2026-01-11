@@ -10,5 +10,6 @@ public class MoneroLwsStatusResponse
     /// <summary>
     /// Custom message.
     /// </summary>
-    [JsonPropertyName("status")] public string Status { get; set; } = "";
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "";
 }

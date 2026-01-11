@@ -8,11 +8,13 @@ public class MoneroLwsAdminRequest : MoneroLwsRequest
     /// Lws admin authentication key.
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("auth")] public string? Auth { get; set; } = null;
-    
+    [JsonPropertyName("auth")]
+    public string? Auth { get; set; } = null;
+
     /// <summary>
     /// Lws admin request parameters.
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("params")] public MoneroLwsAdminParams? Params { get; set; } = null;
+    [JsonPropertyName("params")]
+    public MoneroLwsAdminParams? Params { get; set; } = null;
 }

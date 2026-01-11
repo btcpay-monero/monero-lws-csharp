@@ -8,7 +8,7 @@ public class MoneroLwsServiceIntegrationTest
     private static readonly string Address = TestUtils.Address;
     private static readonly string ViewKey = TestUtils.PrivateViewKey;
     private static readonly MoneroLwsService Lws = TestUtils.GetLwsService();
-    
+
     [Fact]
     public async Task TestGetVersion()
     {
@@ -37,7 +37,7 @@ public class MoneroLwsServiceIntegrationTest
         Assert.False(string.IsNullOrEmpty(response.Network));
         Assert.False(string.IsNullOrEmpty(response.State));
     }
-    
+
     [Fact]
     public async Task TestLogin()
     {
@@ -61,28 +61,28 @@ public class MoneroLwsServiceIntegrationTest
     {
         var requests = await Lws.ListRequests();
         List<string> addressesToCreate = [];
-        
+
         foreach (var createRequest in requests.Create)
         {
             addressesToCreate.Add(createRequest.Address);
         }
 
         var created = await Lws.AcceptRequests("create", addressesToCreate);
-        
+
         Assert.Equal(addressesToCreate.Count, created.UpdatedAddresses.Count);
-        
+
         List<string> addressesToImport = [];
-        
+
         foreach (var importRequest in requests.Import)
         {
             addressesToImport.Add(importRequest.Address);
         }
 
         var imported = await Lws.AcceptRequests("import", addressesToImport);
-        
+
         Assert.Equal(addressesToImport.Count, imported.UpdatedAddresses.Count);
     }
-    
+
     [Fact]
     public async Task TestGetAddressInfo()
     {
@@ -95,14 +95,14 @@ public class MoneroLwsServiceIntegrationTest
         Assert.False(string.IsNullOrEmpty(response.LockedFunds));
         Assert.False(string.IsNullOrEmpty(response.TotalReceived));
         Assert.False(string.IsNullOrEmpty(response.TotalSent));
-        
+
         if (response.TotalSent != "0")
         {
             Assert.NotNull(response.SpentOutputs);
             Assert.NotEmpty(response.SpentOutputs);
             TestSpends(response.SpentOutputs);
         }
-        
+
         Assert.Null(response.Rates);
     }
 
@@ -123,7 +123,7 @@ public class MoneroLwsServiceIntegrationTest
             foreach (var tx in response.Transactions)
             {
                 TestTransaction(tx);
-            }   
+            }
         }
     }
 
@@ -148,7 +148,7 @@ public class MoneroLwsServiceIntegrationTest
             Assert.True(fee > lastFee);
             lastFee = fee;
         }
-        
+
         TestOutputs(response.Outputs);
     }
 
@@ -166,7 +166,7 @@ public class MoneroLwsServiceIntegrationTest
             Assert.False(string.IsNullOrEmpty(response.PaymentAddress));
             Assert.False(string.IsNullOrEmpty(response.PaymentId));
         }
-        
+
         Assert.NotNull(response.Status);
 
         if (response.NewRequest)
@@ -205,7 +205,7 @@ public class MoneroLwsServiceIntegrationTest
         var response = await Lws.ProvisionSubaddrs(Address, ViewKey, 0, 20, 1, 1, true);
         TestSubaddrs(response, true, true);
     }
-    
+
     [Fact]
     public async Task TestGetSubaddrs()
     {
@@ -237,7 +237,7 @@ public class MoneroLwsServiceIntegrationTest
         {
             Assert.Fail($"{response.Error.Field}: {response.Error.Details}");
         }
-        
+
         Assert.False(string.IsNullOrEmpty(response.Address));
         Assert.Equal(TestUtils.Address, response.Address);
     }
@@ -258,13 +258,13 @@ public class MoneroLwsServiceIntegrationTest
         TestAccounts(response.Create, true);
         TestAccounts(response.Import, true);
     }
-    
+
     [Fact]
     public async Task TestAddAccount()
     {
         var address = "43a1cERdj8rT1513tmMUY5MBcWbt1hgSo2fgLhoRrkYTPXejjRjU9y2WCjYfdZMLfZ6LKVc7YRGJMdtxD3x9Dtjc6fFjH9q";
         var viewKey = "4f8d491198f5219b80a03ae2be337b37ace5a4626c67e80a68beb7d0e3eaaa08";
-        
+
         var accounts = await Lws.ListAccounts();
         var found = accounts.Active.Find(x => x.Address.Equals(address));
         if (found != null)
@@ -272,7 +272,7 @@ public class MoneroLwsServiceIntegrationTest
             // account already added
             return;
         }
-        
+
         var response = await Lws.AddAccount(address, viewKey);
         Assert.NotEmpty(response.UpdatedAddresses);
         Assert.Single(response.UpdatedAddresses);
@@ -295,7 +295,7 @@ public class MoneroLwsServiceIntegrationTest
         Assert.Single(response.UpdatedAddresses);
         Assert.Equal(TestUtils.Address, response.UpdatedAddresses.First());
     }
-    
+
     private static void TestTransaction(MoneroLwsTransaction? tx)
     {
         Assert.NotNull(tx);
@@ -336,7 +336,7 @@ public class MoneroLwsServiceIntegrationTest
             TestOutput(output);
         }
     }
-    
+
     private static void TestOutput(MoneroLwsRandomOutput? output)
     {
         Assert.NotNull(output);
@@ -353,7 +353,7 @@ public class MoneroLwsServiceIntegrationTest
             TestOutput(output);
         }
     }
-    
+
     private static void TestOutput(MoneroLwsOutput? output)
     {
         Assert.NotNull(output);
@@ -368,7 +368,7 @@ public class MoneroLwsServiceIntegrationTest
         Assert.False(string.IsNullOrEmpty(output.TxPrefixHash));
         Assert.False(string.IsNullOrEmpty(output.TxPubKey));
         Assert.False(string.IsNullOrEmpty(output.Timestamp));
-        
+
         if (output.SpendKeyImages.Count > 0)
         {
             foreach (var keyImage in output.SpendKeyImages)
@@ -376,7 +376,7 @@ public class MoneroLwsServiceIntegrationTest
                 Assert.NotEmpty(keyImage);
             }
         }
-        
+
         TestAddressMeta(output.Recipient);
     }
 
@@ -388,7 +388,7 @@ public class MoneroLwsServiceIntegrationTest
             TestSpend(spend);
         }
     }
-    
+
     private static void TestSpend(MoneroLwsSpend? spend)
     {
         Assert.NotNull(spend);
@@ -399,7 +399,7 @@ public class MoneroLwsServiceIntegrationTest
         Assert.True(spend.Mixin >= 0);
         TestAddressMeta(spend.Sender);
     }
-    
+
     private static void TestSubaddrs(MoneroLwsSubaddrs? subaddrs, bool expectNew, bool expectAll)
     {
         if (subaddrs == null)
@@ -418,7 +418,7 @@ public class MoneroLwsServiceIntegrationTest
         {
             Assert.NotNull(subaddrs.AllSubaddrs);
             Assert.NotEmpty(subaddrs.AllSubaddrs);
-            TestSubaddrsEntries(subaddrs.AllSubaddrs);   
+            TestSubaddrsEntries(subaddrs.AllSubaddrs);
         }
     }
 
@@ -434,7 +434,7 @@ public class MoneroLwsServiceIntegrationTest
             TestSubaddrsEntry(entry);
         }
     }
-    
+
     private static void TestSubaddrsEntry(MoneroLwsSubaddrsEntry? entry)
     {
         Assert.NotNull(entry);
@@ -458,7 +458,7 @@ public class MoneroLwsServiceIntegrationTest
         Assert.Equal(2, indexRange.Count);
         var lowerBound = indexRange[0];
         var upperBound = indexRange[1];
-        
+
         Assert.True(lowerBound >= 0);
         Assert.True(upperBound >= 0);
         Assert.True(lowerBound <= upperBound);
@@ -470,7 +470,7 @@ public class MoneroLwsServiceIntegrationTest
         Assert.True(addressMeta.MajIndex >= 0);
         Assert.True(addressMeta.MinIndex >= 0);
     }
-    
+
     private static void TestAccount(MoneroLwsAccount? account, bool request)
     {
         Assert.NotNull(account);
@@ -480,7 +480,7 @@ public class MoneroLwsServiceIntegrationTest
             Assert.True(account.StartHeight >= 0);
             return;
         }
-        
+
         Assert.True(account.ScanHeight >= 0);
         Assert.True(account.AccessTime >= 0);
     }
@@ -493,7 +493,7 @@ public class MoneroLwsServiceIntegrationTest
             TestAccount(account, request);
         }
     }
-    
+
     private static void TestAccounts(List<MoneroLwsAccount>? accounts)
     {
         TestAccounts(accounts, false);

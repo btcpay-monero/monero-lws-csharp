@@ -13,5 +13,6 @@ public class MoneroLwsGetRandomOutsResponse
     ///  Dummy outputs for each amount(s). If there are not enough outputs to mix for a specific amount,
     /// the server shall omit the outputs field in amount_outs.
     /// </summary>
-    [JsonPropertyName("amount_outs")] public List<MoneroLwsRandomOutput> AmountOuts { get; set; } = [];
+    [JsonPropertyName("amount_outs")]
+    public List<MoneroLwsRandomOutput> AmountOuts { get; set; } = [];
 }

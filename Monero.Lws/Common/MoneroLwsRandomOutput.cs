@@ -12,13 +12,18 @@ public class MoneroLwsRandomOutput
     /// It is the offset from the first time the amount appeared in the blockchain.
     /// After ringct, this is the order of outputs as they appear in the blockchain.
     /// </summary>
-    [JsonPropertyName("global_index")] public string GlobalIndex { get; set; } = "";
+    [JsonPropertyName("global_index")]
+    public string GlobalIndex { get; set; } = "";
+
     /// <summary>
     /// Bytes of output public key.
     /// </summary>
-    [JsonPropertyName("public_key")] public string PublicKey { get; set; } = "";
+    [JsonPropertyName("public_key")]
+    public string PublicKey { get; set; } = "";
+
     /// <summary>
     /// Bytes containing ringct commitment.
     /// </summary>
-    [JsonPropertyName("rct")] public string Rct { get; set; } = "";
+    [JsonPropertyName("rct")]
+    public string Rct { get; set; } = "";
 }

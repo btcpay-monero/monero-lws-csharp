@@ -8,15 +8,18 @@ public class MoneroLwsListAccountsResponse
     /// <summary>
     /// Active accounts.
     /// </summary>
-    [JsonPropertyName("active")] public List<MoneroLwsAccount> Active { get; set; } = [];
-    
+    [JsonPropertyName("active")]
+    public List<MoneroLwsAccount> Active { get; set; } = [];
+
     /// <summary>
     /// Invactive account.
     /// </summary>
-    [JsonPropertyName("inactive")] public List<MoneroLwsAccount> Inactive { get; set; } = [];
-    
+    [JsonPropertyName("inactive")]
+    public List<MoneroLwsAccount> Inactive { get; set; } = [];
+
     /// <summary>
     /// Deleted accounts.
     /// </summary>
-    [JsonPropertyName("hidden")] public List<MoneroLwsAccount> Hidden { get; set; } = [];
+    [JsonPropertyName("hidden")]
+    public List<MoneroLwsAccount> Hidden { get; set; } = [];
 }

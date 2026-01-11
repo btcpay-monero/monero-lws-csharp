@@ -10,18 +10,25 @@ public class MoneroLwsGetUnspentOutsRequest : MoneroLwsWalletRequest
     /// <summary>
     /// XMR send amount.
     /// </summary>
-    [JsonPropertyName("amount")] public string Amount { get; set; } = "";
+    [JsonPropertyName("amount")]
+    public string Amount { get; set; } = "";
+
     /// <summary>
     /// Minimum mixin for source output.
     /// </summary>
-    [JsonPropertyName("mixin")] public int Mixin { get; set; } = 0;
+    [JsonPropertyName("mixin")]
+    public int Mixin { get; set; } = 0;
+
     /// <summary>
     /// Return all available outputs.
     /// </summary>
-    [JsonPropertyName("use_dust")] public bool UseDust { get; set; } = true;
+    [JsonPropertyName("use_dust")]
+    public bool UseDust { get; set; } = true;
+
     /// <summary>
     /// Ignore outputs below this amount.
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("dust_threshold")] public string? DustThreshold { get; set; } = null;
+    [JsonPropertyName("dust_threshold")]
+    public string? DustThreshold { get; set; } = null;
 }

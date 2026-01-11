@@ -10,15 +10,21 @@ public class MoneroLwsSpend
     /// <summary>
     /// XMR possibly being spent.
     /// </summary>
-    [JsonPropertyName("amount")] public string Amount { get; set; } = "";
+    [JsonPropertyName("amount")]
+    public string Amount { get; set; } = "";
+
     /// <summary>
     /// Bytes of the key image.
     /// </summary>
-    [JsonPropertyName("key_image")] public string KeyImage { get; set; } = "";
+    [JsonPropertyName("key_image")]
+    public string KeyImage { get; set; } = "";
+
     /// <summary>
     /// Bytes of the tx public key.
     /// </summary>
-    [JsonPropertyName("tx_pub_key")] public string TxPubKey { get; set; } = "";
+    [JsonPropertyName("tx_pub_key")]
+    public string TxPubKey { get; set; } = "";
+
     /// <summary>
     /// Index of source output.
     /// </summary>
@@ -27,13 +33,18 @@ public class MoneroLwsSpend
     /// The variable within the monero codebase is the <c>vout</c> array, this is the index within that.
     /// It is needed for correct computation of the <c>KeyImage</c>. 
     /// </remarks>
-    [JsonPropertyName("out_index")] public int OutIndex { get; set; } = 0;
+    [JsonPropertyName("out_index")]
+    public int OutIndex { get; set; } = 0;
+
     /// <summary>
     /// Mixin of the spend. Does not include the real spend - this is the number of dummy inputs.
     /// </summary>
-    [JsonPropertyName("mixin")] public int Mixin { get; set; } = 0;
+    [JsonPropertyName("mixin")]
+    public int Mixin { get; set; } = 0;
+
     /// <summary>
     /// Address data of the sender.
     /// </summary>
-    [JsonPropertyName("sender")] public MoneroLwsAddressMeta Sender { get; set; } = new();
+    [JsonPropertyName("sender")]
+    public MoneroLwsAddressMeta Sender { get; set; } = new();
 }

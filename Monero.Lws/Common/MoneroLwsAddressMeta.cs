@@ -8,7 +8,10 @@ namespace Monero.Lws.Common;
 public class MoneroLwsAddressMeta
 {
     /// <summary>Subaddress major index</summary>
-    [JsonPropertyName("maj_i")] public long MajIndex { get; set; } = 0;
+    [JsonPropertyName("maj_i")]
+    public long MajIndex { get; set; } = 0;
+
     /// <summary>Subaddress minor index</summary>
-    [JsonPropertyName("min_i")] public long MinIndex { get; set; } = 0;
+    [JsonPropertyName("min_i")]
+    public long MinIndex { get; set; } = 0;
 }

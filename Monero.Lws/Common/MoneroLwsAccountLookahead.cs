@@ -10,9 +10,12 @@ public class MoneroLwsAccountLookahead
     /// <summary>
     /// Account index lookahead.
     /// </summary>
-    [JsonPropertyName("maj_i")] public long MajorIndex { get; set; } = 0;
+    [JsonPropertyName("maj_i")]
+    public long MajorIndex { get; set; } = 0;
+
     /// <summary>
     /// Subaddress index lookahead.
     /// </summary>
-    [JsonPropertyName("min_i")] public long MinorIndex { get; set; } = 0;
+    [JsonPropertyName("min_i")]
+    public long MinorIndex { get; set; } = 0;
 }
