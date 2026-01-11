@@ -1,4 +1,4 @@
-name: Build
+name: Build and Test
 
 on:
   push:
@@ -28,6 +28,12 @@ jobs:
 
       - name: Build
         run: dotnet build -c Release --no-restore
+
+      - name: Deterministic build check
+        run: |
+          dotnet tool install --global dotnet-validate --version 0.0.1-preview.537
+          dotnet pack Monero.Lws/Monero.Lws.csproj -c Release /p:PackageVersion=1 --no-build -o nuget-packages
+          dotnet validate package local nuget-packages/MoneroLwsNet.1.0.0.nupkg
         
       - name: Run integration tests
         run: docker compose -f Monero.Lws.IntegrationTests/docker-compose.yml run tests
@@ -35,4 +41,15 @@ jobs:
       - name: Cleanup Docker containers
         if: always()
         run: docker compose -f Monero.Lws.IntegrationTests/docker-compose.yml down -v
-        
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/dotcover.xml
+
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package-${{ github.sha }}
+          path: nuget-packages/MoneroLwsNet.1.0.0.nupkg
