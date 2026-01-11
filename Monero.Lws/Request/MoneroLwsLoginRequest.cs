@@ -12,15 +12,19 @@ public class MoneroLwsLoginRequest : MoneroLwsWalletRequest
     /// <summary>
     /// Try to create a new account.
     /// </summary>
-    [JsonPropertyName("create_account")] public bool CreateAccount { get; set; } = true;
+    [JsonPropertyName("create_account")]
+    public bool CreateAccount { get; set; } = true;
+
     /// <summary>
     /// Indicate that the address is new.
     /// </summary>
-    [JsonPropertyName("generated_locally")] public bool GeneratedLocally { get; set; } = true;
+    [JsonPropertyName("generated_locally")]
+    public bool GeneratedLocally { get; set; } = true;
 
     /// <summary>
     /// Desired lookahead for new account.
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("lookahead")] public MoneroLwsAccountLookahead? Lookahead { get; set; } = null;
+    [JsonPropertyName("lookahead")]
+    public MoneroLwsAccountLookahead? Lookahead { get; set; } = null;
 }

@@ -13,5 +13,6 @@ public class MoneroLwsSubmitRawTxRequest : MoneroLwsRequest
     /// This format is tricky unfortunately, it is custom to the monero daemon.
     /// The internal code of monerod must be read to determine this format currently.
     /// </summary>
-    [JsonPropertyName("tx")] public string Tx { get; set; } = "";
+    [JsonPropertyName("tx")]
+    public string Tx { get; set; } = "";
 }

@@ -12,19 +12,26 @@ public class MoneroLwsGetUnspentOutsResponse
     /// <summary>
     /// Estimated network fee.
     /// </summary>
-    [JsonPropertyName("per_byte_fee")] public long PerByteFee { get; set; } = 0;
+    [JsonPropertyName("per_byte_fee")]
+    public long PerByteFee { get; set; } = 0;
+
     /// <summary>
     /// Fee quantization mask.
     /// </summary>
-    [JsonPropertyName("fee_mask")] public long FeeMask { get; set; } = 0;
+    [JsonPropertyName("fee_mask")]
+    public long FeeMask { get; set; } = 0;
+
     /// <summary>
     /// The total value in outputs.
     /// </summary>
-    [JsonPropertyName("amount")] public string Amount { get; set; } = "";
+    [JsonPropertyName("amount")]
+    public string Amount { get; set; } = "";
 
     [JsonPropertyName("fees")] public List<long> Fees { get; set; } = [];
+
     /// <summary>
     /// Outputs possibly available for spending.
     /// </summary>
-    [JsonPropertyName("outputs")] public List<MoneroLwsOutput> Outputs { get; set; } = [];
+    [JsonPropertyName("outputs")]
+    public List<MoneroLwsOutput> Outputs { get; set; } = [];
 }

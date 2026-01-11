@@ -8,7 +8,14 @@ using Monero.Lws.Response;
 
 namespace Monero.Lws;
 
-public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string username, string password, string? auth = null, HttpClient? client = null)
+public class MoneroLwsService(
+    Uri uri,
+    string lwsPath,
+    string adminPath,
+    string username,
+    string password,
+    string? auth = null,
+    HttpClient? client = null)
 {
     private HttpClient _httpClient = client ?? new HttpClient();
     private string _username = username;
@@ -18,7 +25,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
     {
         return await SendCommandAsync<MoneroLwsRequest, TResponse>(method, new MoneroLwsRequest(), cts);
     }
-    
+
     private async Task<TResponse> SendCommandAsync<TRequest, TResponse>(string method, TRequest data,
         CancellationToken cts = default)
     {
@@ -45,7 +52,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
         {
             throw new MoneroLwsApiException(statusCode, rawResult.ReasonPhrase ?? "Unknown Error");
         }
-        
+
         var rawJson = await rawResult.Content.ReadAsStringAsync(cts);
 
         TResponse? response;
@@ -67,7 +74,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
 
         return response;
     }
-    
+
     public string GetUri()
     {
         return uri.AbsoluteUri;
@@ -97,7 +104,12 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
                 throw new MoneroLwsApiException(-1, "password cannot be empty because username is not empty");
             }
 
-            _httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(username, password) });
+            _httpClient = new HttpClient(
+                new HttpClientHandler
+                {
+                    Credentials = new NetworkCredential(username, password)
+                }
+            );
         }
         else
         {
@@ -107,7 +119,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
         _username = username;
         _password = password;
     }
-    
+
     /// <summary>
     /// Get LWS server version.
     /// </summary>
@@ -116,7 +128,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
     {
         return await SendCommandAsync<MoneroLwsDaemonStatus>("daemon_status");
     }
-    
+
     /// <summary>
     /// Get LWS server version.
     /// </summary>
@@ -125,7 +137,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
     {
         return await SendCommandAsync<MoneroLwsVersion>("get_version");
     }
-    
+
     /// <summary>
     /// Returns the minimal set of information needed to calculate a wallet balance,
     /// including the balance of subaddresses. The server cannot calculate when a spend occurs without the spend key,
@@ -179,7 +191,8 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             Amounts = amounts
         };
 
-        return await SendCommandAsync<MoneroLwsGetRandomOutsRequest, MoneroLwsGetRandomOutsResponse>("get_random_outs", req);
+        return await SendCommandAsync<MoneroLwsGetRandomOutsRequest, MoneroLwsGetRandomOutsResponse>("get_random_outs",
+            req);
     }
 
     /// <summary>
@@ -206,7 +219,8 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             DustThreshold = dustThreshold
         };
 
-        return await SendCommandAsync<MoneroLwsGetUnspentOutsRequest, MoneroLwsGetUnspentOutsResponse>("get_unspent_outs", req);
+        return await SendCommandAsync<MoneroLwsGetUnspentOutsRequest, MoneroLwsGetUnspentOutsResponse>(
+            "get_unspent_outs", req);
     }
 
     /// <summary>
@@ -225,7 +239,8 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             FromHeight = fromHeight
         };
 
-        return await SendCommandAsync<MoneroLwsImportWalletRequest, MoneroLwsImportWalletResponse>("import_wallet_request", req);
+        return await SendCommandAsync<MoneroLwsImportWalletRequest, MoneroLwsImportWalletResponse>(
+            "import_wallet_request", req);
     }
 
     /// <summary>
@@ -281,7 +296,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
 
         return await SendCommandAsync<MoneroLwsWalletRequest, MoneroLwsSubaddrs>("get_subaddrs", req);
     }
-    
+
     /// <summary>
     /// Upsert subaddresses at the specified major and minor indexes. This endpoint is idempotent.
     /// </summary>
@@ -290,7 +305,8 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
     /// <param name="subaddrs">Subaddresses to upsert.</param>
     /// <param name="getAll">Whether to include all subaddresses in response.</param>
     /// <returns></returns>
-    public async Task<MoneroLwsSubaddrs> UpsertSubaddrs(string address, string viewKey, List<MoneroLwsSubaddrsEntry> subaddrs, bool getAll)
+    public async Task<MoneroLwsSubaddrs> UpsertSubaddrs(string address, string viewKey,
+        List<MoneroLwsSubaddrsEntry> subaddrs, bool getAll)
     {
         var req = new MoneroLwsUpsertSubaddrsRequest()
         {
@@ -302,7 +318,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
 
         return await SendCommandAsync<MoneroLwsUpsertSubaddrsRequest, MoneroLwsSubaddrs>("upsert_subaddrs", req);
     }
-    
+
     /// <summary>
     /// Provision subaddresses at specified indexes. No two clients should ever receive
     /// the same newly provisioned subaddresses when calling this endpoint; the server
@@ -332,7 +348,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
 
         return await SendCommandAsync<MoneroLwsProvisionSubaddrsRequest, MoneroLwsSubaddrs>("provision_subaddrs", req);
     }
-    
+
     #region Administration
 
     /// <summary>
@@ -355,7 +371,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
 
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("accept_requests", req);
     }
-    
+
     /// <summary>
     /// Reject account creation or import from the incoming queue.
     /// </summary>
@@ -376,7 +392,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
 
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("reject_requests", req);
     }
-    
+
     /// <summary>
     /// Add account for view-key scanning.
     /// </summary>
@@ -394,7 +410,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             },
             Auth = auth
         };
-        
+
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("add_account", req);
     }
 
@@ -419,7 +435,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             },
             Auth = auth
         };
-        
+
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("modify_account_status", req);
     }
 
@@ -435,7 +451,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
         };
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsListAccountsResponse>("list_accounts", req);
     }
-    
+
     /// <summary>
     /// Return the listing of all pending new account requests and all requests to import from genesis block requests.
     /// </summary>
@@ -466,7 +482,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             },
             Auth = auth
         };
-        
+
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsUpdateResponse>("rescan", req);
     }
 
@@ -490,7 +506,7 @@ public class MoneroLwsService(Uri uri, string lwsPath, string adminPath, string 
             },
             Auth = auth
         };
-        
+
         return await SendCommandAsync<MoneroLwsAdminRequest, MoneroLwsValidateResponse>("validate", req);
     }
 

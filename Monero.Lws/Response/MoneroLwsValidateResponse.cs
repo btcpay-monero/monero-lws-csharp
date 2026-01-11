@@ -13,10 +13,12 @@ public class MoneroLwsValidateResponse
     /// <summary>
     /// Validated account address.
     /// </summary>
-    [JsonPropertyName("address")] public string Address { get; set; } = "";
-    
+    [JsonPropertyName("address")]
+    public string Address { get; set; } = "";
+
     /// <summary>
     /// Validation error.
     /// </summary>
-    [JsonPropertyName("error")] public MoneroValidationError? Error { get; set; } = null;
+    [JsonPropertyName("error")]
+    public MoneroValidationError? Error { get; set; } = null;
 }

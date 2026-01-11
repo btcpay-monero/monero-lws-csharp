@@ -8,10 +8,12 @@ public class MoneroLwsListRequestsResponse
     /// <summary>
     /// Account <c>create</c> requests.
     /// </summary>
-    [JsonPropertyName("create")] public List<MoneroLwsAccount> Create { get; set; } = [];
+    [JsonPropertyName("create")]
+    public List<MoneroLwsAccount> Create { get; set; } = [];
 
     /// <summary>
     /// Account <c>import</c> requests.
     /// </summary>
-    [JsonPropertyName("import")] public List<MoneroLwsAccount> Import { get; set; } = [];
+    [JsonPropertyName("import")]
+    public List<MoneroLwsAccount> Import { get; set; } = [];
 }
