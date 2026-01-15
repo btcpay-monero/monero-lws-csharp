@@ -6,7 +6,14 @@
 [![Matrix rooms](https://img.shields.io/badge/%F0%9F%92%AC%20Matrix-%23btcpay--monero-blue)](https://matrix.to/#/#btcpay-monero:matrix.org)
 </div>
 
-
 # Monero LWS C# Bindings
 
 Library for interacting with Monero Light Wallet Server.
+
+## Code formatting
+
+We use the **unmodified** standardized `.editorconfig` from .NET SDK. Run `dotnet new editorconfig --force` to apply the latest version.
+
+To enforce formatting for the whole project, run `dotnet format monero-lws-csharp.sln --verbosity diagnostic`
+
+To enforce custom analyzer configuration options, we do use global _AnalyzerConfig_ `.globalconfig` file.

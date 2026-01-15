@@ -1,6 +1,8 @@
 using Monero.Lws.Common;
 using Monero.Lws.IntegrationTests.Utils;
 
+using Xunit;
+
 namespace Monero.Lws.IntegrationTests;
 
 public class MoneroLwsServiceIntegrationTest
