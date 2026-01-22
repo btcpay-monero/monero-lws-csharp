@@ -7,8 +7,7 @@ namespace Monero.Lws.IntegrationTests;
 
 public class MoneroLwsServiceIntegrationTest
 {
-    private static readonly string Address = TestUtils.Address;
-    private static readonly string ViewKey = TestUtils.PrivateViewKey;
+    private static readonly List<WalletInfo> Wallets = TestUtils.Config.Wallets;
     private static readonly MoneroLwsService Lws = TestUtils.GetLwsService();
 
     [Fact]
@@ -43,18 +42,21 @@ public class MoneroLwsServiceIntegrationTest
     [Fact]
     public async Task TestLogin()
     {
-        var response = await Lws.Login(Address, ViewKey, true, true);
-        if (response.NewAddress)
+        foreach (var wallet in Wallets)
         {
-            Assert.True(response.GeneratedLocally);
-            if (response.StartHeight != null)
+            var response = await Lws.Login(wallet.PrimaryAddress, wallet.PrivateViewKey, true, true);
+            if (response.NewAddress)
             {
-                Assert.True(response.StartHeight > 0);
+                Assert.True(response.GeneratedLocally);
+                if (response.StartHeight != null)
+                {
+                    Assert.True(response.StartHeight > 0);
+                }
             }
-        }
-        else
-        {
-            Assert.Null(response.StartHeight);
+            else
+            {
+                Assert.Null(response.StartHeight);
+            }
         }
     }
 
@@ -88,43 +90,49 @@ public class MoneroLwsServiceIntegrationTest
     [Fact]
     public async Task TestGetAddressInfo()
     {
-        var response = await Lws.GetAddressInfo(Address, ViewKey);
-        Assert.True(response.StartHeight >= 0);
-        Assert.True(response.BlockchainHeight > 0);
-        Assert.True(response.ScannedBlockHeight > 0);
-        Assert.True(response.ScannedHeight > 0);
-        Assert.True(response.TransactionHeight > 0);
-        Assert.False(string.IsNullOrEmpty(response.LockedFunds));
-        Assert.False(string.IsNullOrEmpty(response.TotalReceived));
-        Assert.False(string.IsNullOrEmpty(response.TotalSent));
-
-        if (response.TotalSent != "0")
+        foreach (var wallet in Wallets)
         {
-            Assert.NotNull(response.SpentOutputs);
-            Assert.NotEmpty(response.SpentOutputs);
-            TestSpends(response.SpentOutputs);
-        }
+            var response = await Lws.GetAddressInfo(wallet.PrimaryAddress, wallet.PrivateViewKey);
+            Assert.True(response.StartHeight >= 0);
+            Assert.True(response.BlockchainHeight > 0);
+            Assert.True(response.ScannedBlockHeight > 0);
+            Assert.True(response.ScannedHeight > 0);
+            Assert.True(response.TransactionHeight > 0);
+            Assert.False(string.IsNullOrEmpty(response.LockedFunds));
+            Assert.False(string.IsNullOrEmpty(response.TotalReceived));
+            Assert.False(string.IsNullOrEmpty(response.TotalSent));
 
-        Assert.Null(response.Rates);
+            if (response.TotalSent != "0")
+            {
+                Assert.NotNull(response.SpentOutputs);
+                Assert.NotEmpty(response.SpentOutputs);
+                TestSpends(response.SpentOutputs);
+            }
+
+            Assert.Null(response.Rates);
+        }
     }
 
     [Fact]
     public async Task TestGetAddressTxs()
     {
-        var response = await Lws.GetAddressTxs(Address, ViewKey);
-        Assert.NotNull(response.TotalReceived);
-        Assert.NotEmpty(response.TotalReceived);
-        Assert.True(response.ScannedHeight > 0);
-        Assert.True(response.ScannedBlockHeight > 0);
-        Assert.True(response.StartHeight > 0);
-        Assert.True(response.BlockchainHeight > 0);
-        if (!response.TotalReceived.Equals("0"))
+        foreach (var wallet in Wallets)
         {
-            Assert.NotNull(response.Transactions);
-            Assert.NotEmpty(response.Transactions);
-            foreach (var tx in response.Transactions)
+            var response = await Lws.GetAddressTxs(wallet.PrimaryAddress, wallet.PrivateViewKey);
+            Assert.NotNull(response.TotalReceived);
+            Assert.NotEmpty(response.TotalReceived);
+            Assert.True(response.ScannedHeight > 0);
+            Assert.True(response.ScannedBlockHeight > 0);
+            Assert.True(response.StartHeight >= 0);
+            Assert.True(response.BlockchainHeight > 0);
+            if (!response.TotalReceived.Equals("0"))
             {
-                TestTransaction(tx);
+                Assert.NotNull(response.Transactions);
+                Assert.NotEmpty(response.Transactions);
+                foreach (var tx in response.Transactions)
+                {
+                    TestTransaction(tx);
+                }
             }
         }
     }
@@ -139,51 +147,57 @@ public class MoneroLwsServiceIntegrationTest
     [Fact]
     public async Task TestGetUnspentOuts()
     {
-        var response = await Lws.GetUnspentOuts(Address, ViewKey, "0", 0, true);
-        Assert.True(response.PerByteFee > 0);
-        Assert.True(response.FeeMask > 0);
-        Assert.False(string.IsNullOrEmpty(response.Amount));
-        Assert.Equal(4, response.Fees.Count);
-        long lastFee = 0;
-        foreach (var fee in response.Fees)
+        foreach (var wallet in Wallets)
         {
-            Assert.True(fee > lastFee);
-            lastFee = fee;
-        }
+            var response = await Lws.GetUnspentOuts(wallet.PrimaryAddress, wallet.PrivateViewKey, "0", 0, true);
+            Assert.True(response.PerByteFee > 0);
+            Assert.True(response.FeeMask > 0);
+            Assert.False(string.IsNullOrEmpty(response.Amount));
+            Assert.Equal(4, response.Fees.Count);
+            long lastFee = 0;
+            foreach (var fee in response.Fees)
+            {
+                Assert.True(fee > lastFee);
+                lastFee = fee;
+            }
 
-        TestOutputs(response.Outputs);
+            TestOutputs(response.Outputs);
+        }
     }
 
     [Fact]
     public async Task TestImportWallet()
     {
-        var response = await Lws.ImportWallet(Address, ViewKey, 0);
-        if (string.IsNullOrEmpty(response.ImportFee) || response.ImportFee.Equals("0"))
+        foreach (var wallet in Wallets)
         {
-            Assert.True(string.IsNullOrEmpty(response.PaymentAddress));
-            Assert.True(string.IsNullOrEmpty(response.PaymentId));
-        }
-        else
-        {
-            Assert.False(string.IsNullOrEmpty(response.PaymentAddress));
-            Assert.False(string.IsNullOrEmpty(response.PaymentId));
-        }
+            var response = await Lws.ImportWallet(wallet.PrimaryAddress, wallet.PrivateViewKey, 0);
+            if (string.IsNullOrEmpty(response.ImportFee) || response.ImportFee.Equals("0"))
+            {
+                Assert.True(string.IsNullOrEmpty(response.PaymentAddress));
+                Assert.True(string.IsNullOrEmpty(response.PaymentId));
+            }
+            else
+            {
+                Assert.False(string.IsNullOrEmpty(response.PaymentAddress));
+                Assert.False(string.IsNullOrEmpty(response.PaymentId));
+            }
 
-        Assert.NotNull(response.Status);
-
-        if (response.NewRequest)
-        {
-            Assert.False(response.RequestFulfilled);
-            Assert.Equal("Accepted, waiting for approval", response.Status);
-        }
-
-        if (response.RequestFulfilled)
-        {
             Assert.NotNull(response.Status);
-        }
-        else if (!response.NewRequest)
-        {
-            Assert.Equal("Waiting for Approval", response.Status);
+
+            if (response.NewRequest)
+            {
+                Assert.False(response.RequestFulfilled);
+                Assert.Equal("Accepted, waiting for approval", response.Status);
+            }
+
+            if (response.RequestFulfilled)
+            {
+                Assert.NotNull(response.Status);
+            }
+            else if (!response.NewRequest)
+            {
+                Assert.Equal("Waiting for Approval", response.Status);
+            }
         }
     }
 
@@ -197,51 +211,70 @@ public class MoneroLwsServiceIntegrationTest
         };
         entry.Ranges.Add([2, 10]);
         subaddrs.Add(entry);
-        var response = await Lws.UpsertSubaddrs(Address, ViewKey, subaddrs, true);
-        TestSubaddrs(response, true, true);
+        foreach (var wallet in Wallets)
+        {
+            var response = await Lws.UpsertSubaddrs(wallet.PrimaryAddress, wallet.PrivateViewKey, subaddrs, true);
+            TestSubaddrs(response, true, true);
+        }
     }
 
     [Fact]
     public async Task TestProvisionSubaddrs()
     {
-        var response = await Lws.ProvisionSubaddrs(Address, ViewKey, 0, 20, 1, 1, true);
-        TestSubaddrs(response, true, true);
+        foreach (var wallet in Wallets)
+        {
+            var response = await Lws.ProvisionSubaddrs(wallet.PrimaryAddress, wallet.PrivateViewKey, 0, 20, 1, 1, true);
+            TestSubaddrs(response, true, true);
+        }
     }
 
     [Fact]
     public async Task TestGetSubaddrs()
     {
-        var response = await Lws.GetSubaddrs(Address, ViewKey);
-        Assert.Empty(response.NewSubaddrs);
-        Assert.NotNull(response.AllSubaddrs);
-        Assert.NotEmpty(response.AllSubaddrs);
-        foreach (var entry in response.AllSubaddrs)
+        foreach (var wallet in Wallets)
         {
-            TestSubaddrsEntry(entry);
+            var response = await Lws.GetSubaddrs(wallet.PrimaryAddress, wallet.PrivateViewKey);
+            Assert.Empty(response.NewSubaddrs);
+            Assert.NotNull(response.AllSubaddrs);
+            Assert.NotEmpty(response.AllSubaddrs);
+            foreach (var entry in response.AllSubaddrs)
+            {
+                TestSubaddrsEntry(entry);
+            }
         }
     }
 
     [Fact]
     public async Task TestRescan()
     {
-        var response = await Lws.Rescan(0, [Address]);
+        List<string> addresses = [];
+        foreach (var wallet in Wallets)
+        {
+            addresses.Add(wallet.PrimaryAddress);
+        }
+
+        var response = await Lws.Rescan(0, addresses);
         Assert.NotEmpty(response.UpdatedAddresses);
-        Assert.Single(response.UpdatedAddresses);
-        Assert.Equal(Address, response.UpdatedAddresses.First());
+        Assert.Equal(response.UpdatedAddresses.Count, addresses.Count);
+        TestAddressesEqual(addresses, response.UpdatedAddresses);
     }
 
     [Fact]
     public async Task TestValidate()
     {
-        var response = await Lws.Validate(TestUtils.PublicViewKey, TestUtils.PublicSpendKey, TestUtils.PrivateViewKey);
-
-        if (response.Error != null)
+        foreach (var wallet in Wallets)
         {
-            Assert.Fail($"{response.Error.Field}: {response.Error.Details}");
-        }
+            var response = await Lws.Validate(wallet.PublicViewKey, wallet.PublicSpendKey,
+                wallet.PrivateViewKey);
 
-        Assert.False(string.IsNullOrEmpty(response.Address));
-        Assert.Equal(TestUtils.Address, response.Address);
+            if (response.Error != null)
+            {
+                Assert.Fail($"{response.Error.Field}: {response.Error.Details}");
+            }
+
+            Assert.False(string.IsNullOrEmpty(response.Address));
+            Assert.Equal(wallet.PrimaryAddress, response.Address);
+        }
     }
 
     [Fact]
@@ -284,19 +317,23 @@ public class MoneroLwsServiceIntegrationTest
     [Fact]
     public async Task TestModifyAccountStatus()
     {
+        List<string> addresses = [];
+        foreach (var wallet in Wallets)
+        {
+            addresses.Add(wallet.PrimaryAddress);
+        }
+
         // deactivate account
-        var response = await Lws.ModifyAccountStatus("inactive", [TestUtils.Address]);
-        Assert.NotEmpty(response.UpdatedAddresses);
-        Assert.Single(response.UpdatedAddresses);
-        Assert.Equal(TestUtils.Address, response.UpdatedAddresses.First());
+        var response = await Lws.ModifyAccountStatus("inactive", addresses);
+        TestAddressesEqual(addresses, response.UpdatedAddresses);
         // wait for lws to catch up
         Thread.Sleep(5000);
         // reactivate account
-        response = await Lws.ModifyAccountStatus("active", [TestUtils.Address]);
-        Assert.NotEmpty(response.UpdatedAddresses);
-        Assert.Single(response.UpdatedAddresses);
-        Assert.Equal(TestUtils.Address, response.UpdatedAddresses.First());
+        response = await Lws.ModifyAccountStatus("active", addresses);
+        TestAddressesEqual(addresses, response.UpdatedAddresses);
     }
+
+    #region Test Utils
 
     private static void TestTransaction(MoneroLwsTransaction? tx)
     {
@@ -500,4 +537,19 @@ public class MoneroLwsServiceIntegrationTest
     {
         TestAccounts(accounts, false);
     }
+
+    private static void TestAddressesEqual(List<string>? addresses, List<string>? others)
+    {
+        Assert.NotNull(addresses);
+        Assert.NotNull(others);
+        Assert.Equal(addresses.Count, others.Count);
+        for (int i = 0; i < others.Count; i++)
+        {
+            var address = addresses[i];
+            var other = others[i];
+            Assert.Equal(address, other);
+        }
+    }
+
+    #endregion
 }

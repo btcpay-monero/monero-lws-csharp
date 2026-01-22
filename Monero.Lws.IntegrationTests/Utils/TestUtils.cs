@@ -6,13 +6,7 @@ internal static class TestUtils
     public static readonly Uri LwsServiceUri = new(GetDefaultEnv("XMR_LWS_URI", "http://127.0.0.1:8443"));
     public const string Username = "";
     public const string Password = "";
-
-    public const string Address =
-        "42EhKmBx6pAPYhX4QCHKBPRw8dgc3VVVdA7g2dxr5wz21crqvPUkwPTde64Xac5uawQeFbh6K7PD4YLqiX1VTP5jUH7gZez";
-
-    public const string PublicViewKey = "b244f89be70e16db0d8905628480708d590ffd4e820303bb61c96cf2395bfaf1";
-    public const string PublicSpendKey = "1030f7c992ec9b86cc0055d2c44632951104e67b05d28c367ecd8382c0931303";
-    public const string PrivateViewKey = "41f55a92b942681e35bf7bb64f71142729039bd8e606a4f4218c543065c15c05";
+    public static readonly TestConfig Config = TestConfig.Load();
 
     private static MoneroLwsService? _lwsService = null;
 

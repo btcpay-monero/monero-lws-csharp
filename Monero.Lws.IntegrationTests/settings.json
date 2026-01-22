@@ -1,0 +1,34 @@
+{
+  "wallets": [
+    {
+      "primaryAddress": "42EhKmBx6pAPYhX4QCHKBPRw8dgc3VVVdA7g2dxr5wz21crqvPUkwPTde64Xac5uawQeFbh6K7PD4YLqiX1VTP5jUH7gZez",
+      "publicViewKey": "b244f89be70e16db0d8905628480708d590ffd4e820303bb61c96cf2395bfaf1",
+      "publicSpendKey": "1030f7c992ec9b86cc0055d2c44632951104e67b05d28c367ecd8382c0931303",
+      "privateViewKey": "41f55a92b942681e35bf7bb64f71142729039bd8e606a4f4218c543065c15c05"
+    },
+    {
+      "primaryAddress": "48vqoFpnN5ERGo9nfBcdCb48XLhPWbTHZ3bNdHkiC5n67wYVgRiB2Ti1kCPpbqNFwVDa6TVv9fS3hKfNZiqf45TsLYfJpFV",
+      "publicViewKey": "7e7196620e24110473e1ed38a5f1984b2796099f37fcb06f92000a594930bead",
+      "publicSpendKey": "c0c963f3903121911d66150f9048c812b6181437388ac80f80173d96fbc6ef29",
+      "privateViewKey": "4ddf79ccfc707b81681f5ddbab1cd2fa7fb001bb92768376396e002c12d9790b"
+    },
+    {
+      "primaryAddress": "43RKRsiBN9nPaXkMwAL5r1aGgrSEnqUPrje4voU7BVerBYUi5UigN3C7w82qeK2sqCjNQViB9JyCMRkoxpRZvvxSUru5QSz",
+      "publicViewKey": "07e297d3d5a07b2973505783c652dbfd4eda4d4701271a9400a42e979dab8bf6",
+      "publicSpendKey": "2f699dbcc9975186fc552764528672c6e93fb190d4a429feec29e531ee8d533f",
+      "privateViewKey": "eb45d8c771c08e8702c3e17e85d053696a3e41782aea96d619052c0d57184301"
+    },
+    {
+      "primaryAddress": "49QVG5DJXiUVyKBwfaCyXxd3Ftf6LVn6wfzUpQkoCmE1Zmvew6Tu3qPRzEdrTdVrVV9bRfxt6KdY8CPSB5HCSmUkHuY9MCK",
+      "publicViewKey": "f244240bba181e9562ea53959bb27833609ee4492279dd4413c2c9106b031195",
+      "publicSpendKey": "cd5d621ad33a45ad34b1d1170297ebd7766a5b6cdb085ce91cb427c74d59dac3",
+      "privateViewKey": "bf5e19cd9a32e7fae300419a430b2fae3345dc2ce71056ac9790fa30eefdd600"
+    },
+    {
+      "primaryAddress": "4Ak1faX5RFdPbvZ8TSDvGaj8KYhPBMPAAjkS2RVfnDSa17y4MvuGnF2VpeBWHDzRHm4J8aj1MgvJWbxjGDwvWyEZNYX3B84",
+      "publicViewKey": "b7d5b7b44f4cb9ac4fd72c2f1d021413b39f8a31c20bc3d10467341b528e0abe",
+      "publicSpendKey": "f0a2d6c96d4750872118e2c48acb6bfbdb2a1b8cfc3c2bff94179b8cad89e300",
+      "privateViewKey": "f144c669767005078546c18092167ce4cb2d6df539fe2c5b8feec9b2d8c75007"
+    }
+  ]
+}

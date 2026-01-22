@@ -42,7 +42,7 @@ services:
       "--no-zmq",
       "--max-connections-per-ip=100",
       "--rpc-max-connections-per-private-ip=100",
-      "--start-mining=42U9v3qs5CjZEePHBZHwuSckQXebuZu299NSmVEmQ41YJZQhKcPyujyMSzpDH4VMMVSBo3U3b54JaNvQLwAjqDhKS3rvM3L",
+      "--start-mining=4Ak1faX5RFdPbvZ8TSDvGaj8KYhPBMPAAjkS2RVfnDSa17y4MvuGnF2VpeBWHDzRHm4J8aj1MgvJWbxjGDwvWyEZNYX3B84",
       "--mining-threads=1",
       "--non-interactive"
     ]
