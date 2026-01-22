@@ -17,3 +17,17 @@ We use the **unmodified** standardized `.editorconfig` from .NET SDK. Run `dotne
 To enforce formatting for the whole project, run `dotnet format monero-lws-csharp.sln --verbosity diagnostic`
 
 To enforce custom analyzer configuration options, we do use global _AnalyzerConfig_ `.globalconfig` file.
+
+## Documentation
+
+We use [DocFX](https://github.com/dotnet/docfx) to generate documentation.
+
+To build and serve the docs locally:
+````
+docfx metadata docs/docfx.json      # Generate metadata
+docfx build docs/docfx.json --serve # Build and serve documentation
+````
+
+# License
+
+[MIT](LICENSE.md)

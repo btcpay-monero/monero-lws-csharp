@@ -1,0 +1,54 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "..",
+          "files": [
+            "Monero.Lws/Monero.Lws.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "disableDefaultFilter": false
+    }
+  ],
+  "build": {
+    "globalMetadata": {
+      "_appTitle": "Monero Lws C#",
+      "_appName": "Monero Lws C#",
+      "_appLogoPath": "images/small_logo.png",
+      "_appFaviconPath": "images/favicon.ico",
+      "_enableSearch": true
+    },
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "index.md",
+          "LICENSE.md",
+          "toc.yml"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "exportViewModel": true,
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [
+      "default",
+      "modern"
+    ],
+    "disableGitFeatures": true,
+    "postProcessors": [
+      "ExtractSearchIndex"
+    ]
+  }
+}
