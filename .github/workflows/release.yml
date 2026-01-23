@@ -1,0 +1,60 @@
+name: Release NuGet package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  release:
+    if: github.repository == 'btcpay-monero/monero-lws-csharp'
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Initialize
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Clean project
+        run: dotnet clean
+
+      - name: Get package version
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Build
+        run: dotnet build -c Release /p:Version=${{ env.VERSION }} --no-restore
+
+      - name: Deterministic build check and package creation
+        run: |
+          dotnet tool install --global dotnet-validate --version 0.0.1-preview.537
+          dotnet pack Monero.Lws/Monero.Lws.csproj -c Release /p:PackageVersion=${{ env.VERSION }} --no-build -o nuget-packages
+          dotnet validate package local nuget-packages/MoneroLwsNet.${{ env.VERSION }}.nupkg
+
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package-${{ github.sha }}
+          path: nuget-packages/MoneroLwsNet.${{ env.VERSION }}.nupkg
+
+      # Get a short-lived NuGet API key
+      - name: NuGet Login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push package
+        run: dotnet nuget push nuget-packages/MoneroLwsNet.${{ env.VERSION }}.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
