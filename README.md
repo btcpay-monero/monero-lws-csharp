@@ -4,11 +4,12 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/84cf2fb05ddb4824bff5758696db0f42)](https://app.codacy.com/gh/btcpay-monero/monero-lws-csharp/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/84cf2fb05ddb4824bff5758696db0f42)](https://app.codacy.com/gh/btcpay-monero/monero-lws-csharp/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![Matrix rooms](https://img.shields.io/badge/%F0%9F%92%AC%20Matrix-%23btcpay--monero-blue)](https://matrix.to/#/#btcpay-monero:matrix.org)
+[![Nuget](https://img.shields.io/nuget/v/MoneroLwsNet.svg)](https://www.nuget.org/packages/MoneroLwsNet)
 </div>
 
 # Monero LWS C# Bindings
 
-Library for interacting with Monero Light Wallet Server.
+Library for interacting with [Monero Light Wallet Server](https://github.com/vtnerd/monero-lws).
 
 ## Code formatting
 

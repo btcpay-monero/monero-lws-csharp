@@ -1,4 +1,9 @@
 .idea
 .vs
-obj/
-bin/
+**/bin/**/*
+**/obj
+**/.AssemblyAttributes
+coverage
+nuget-packages
+.DS_Store
+monero-lws-csharp.sln.DotSettings.user

@@ -23,7 +23,7 @@ services:
       - lws
 
   node_1:
-    image: btcpayserver/monero:0.18.4.2
+    image: btcpayserver/monero:0.18.4.3
     container_name: node_1
     command: [
       "monerod",
@@ -53,7 +53,7 @@ services:
       - "18089:18089"
 
   node_2:
-    image: btcpayserver/monero:0.18.4.2
+    image: btcpayserver/monero:0.18.4.3
     container_name: node_2
     command: [
       "monerod",
