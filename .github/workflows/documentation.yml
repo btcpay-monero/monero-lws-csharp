@@ -37,10 +37,14 @@ jobs:
       - name: Build
         run: dotnet build -c Release
 
+      - name: Install DocFX
+        run: dotnet tool install -g docfx
+
+      - name: Generate metadata
+        run: docfx metadata docs/docfx.json
+
       - name: Build Documentation
-        uses: nunit/docfx-action@v4.1.0
-        with:
-          args: docs/docfx.json
+        run: docfx build docs/docfx.json
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
