@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS builder
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS builder
 
 WORKDIR /source
 
@@ -7,7 +7,7 @@ COPY . .
 ARG CONFIGURATION_NAME=Release
 WORKDIR /source/Monero.Lws.IntegrationTests
 RUN dotnet build --configuration ${CONFIGURATION_NAME} /p:CI_TESTS=true /p:RazorCompileOnBuild=true
-RUN dotnet tool install --global JetBrains.DotCover.CommandLineTools --version 2025.1.6
+RUN dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.5.11
 ENV PATH="$PATH:/root/.dotnet/tools"
 ENV CONFIGURATION_NAME=${CONFIGURATION_NAME}
 ENTRYPOINT ["./docker-entrypoint.sh"]

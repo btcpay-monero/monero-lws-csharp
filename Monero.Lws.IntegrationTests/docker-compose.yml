@@ -12,7 +12,7 @@ services:
     extra_hosts:
       - "tests:127.0.0.1"
     volumes:
-      - ../coverage:/coverage
+      - ../TestResults:/TestResults
 
   # The dev container is not used, it is just handy to run `docker-compose up dev` to start all services
   dev:
@@ -90,7 +90,7 @@ services:
       - node_1
 
   lws:
-    image: vtnerd/monero-lws:v1.0.2
+    image: vtnerd/monero-lws:v1.0.3
     container_name: lws
     command: >
       --daemon=tcp://node_2:18082
