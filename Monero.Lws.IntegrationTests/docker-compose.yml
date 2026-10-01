@@ -90,7 +90,7 @@ services:
       - node_1
 
   lws:
-    image: vtnerd/monero-lws:v1.0.1
+    image: vtnerd/monero-lws:v1.0.2
     container_name: lws
     command: >
       --daemon=tcp://node_2:18082
