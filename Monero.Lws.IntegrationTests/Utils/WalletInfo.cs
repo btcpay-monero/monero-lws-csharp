@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Monero.Lws.IntegrationTests.Utils;
 
-internal class WalletInfo
+public class WalletInfo
 {
     [JsonPropertyName("primaryAddress")] public string PrimaryAddress { get; set; } = "";
     [JsonPropertyName("publicViewKey")] public string PublicViewKey { get; set; } = "";
