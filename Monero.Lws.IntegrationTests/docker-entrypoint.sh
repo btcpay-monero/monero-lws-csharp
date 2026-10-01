@@ -1,23 +1,17 @@
 #!/bin/sh
 set -e
 
-dotCover cover-dotnet \
-  --TargetArguments="test -c ${CONFIGURATION_NAME} --no-build" \
-  --Output=/coverage/dotCover.IntegrationTests.output.dcvr \
-  --filters="-:Assembly=Monero.Lws.IntegrationTests;-:Assembly=testhost"
+dotnet "bin/${CONFIGURATION_NAME}/net10.0/Monero.Lws.IntegrationTests.dll" \
+  --output Detailed \
+  --coverlet \
+  --coverlet-output-format cobertura
 
-dotCover merge \
-  --Source=/coverage/dotCover.IntegrationTests.output.dcvr \
-  --Output=/coverage/mergedCoverage.dcvr
+mkdir -p /TestResults/coverage/integration
 
-dotCover report \
-  --Source=/coverage/mergedCoverage.dcvr \
-  --ReportType=HTML \
-  --Output=/coverage/mergedCoverage.html \
-  --ReportType=DetailedXML \
-  --Output=/coverage/dotcover.xml
-  
-dotCover report \
-  --Source=/coverage/dotCover.IntegrationTests.output.dcvr \
-  --ReportType=HTML \
-  --Output=/coverage/integrationCoverage.html
+mv "bin/${CONFIGURATION_NAME}/net10.0/TestResults"/coverage.cobertura.*.xml \
+   /TestResults/coverage/integration/coverage.cobertura.xml
+
+reportgenerator \
+  -reports:"/TestResults/coverage/integration/coverage.cobertura.xml" \
+  -targetdir:"/TestResults/coverage" \
+  -reporttypes:"HtmlSummary;Cobertura"
