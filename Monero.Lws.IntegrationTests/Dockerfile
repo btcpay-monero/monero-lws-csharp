@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS builder
+FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS builder
 
 WORKDIR /source
 
