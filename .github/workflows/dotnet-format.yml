@@ -1,5 +1,8 @@
 name: Code format check
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
